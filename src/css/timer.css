@@ -1,0 +1,15 @@
+.timer {
+  display: flex;
+}
+
+#datetime-picker {
+  padding: 10px;
+  height: 40px;
+  border: none;
+  border-radius: 5px;
+}
+
+.timer-box {
+  padding: 10px;
+  height: 40px;
+}
