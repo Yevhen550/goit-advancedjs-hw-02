@@ -1,48 +1,55 @@
 import flatpickr from 'flatpickr';
 import iziToast from 'izitoast';
 import { convertMs } from './convert-ms';
+import { addLeadingZero } from './add-zero';
 
 const startBtn = document.querySelector('[data-start]');
 const inputData = document.getElementById('datetime-picker');
+const daysEl = document.querySelector('[data-days]');
+const hoursEl = document.querySelector('[data-hours]');
+const minutesEl = document.querySelector('[data-minutes]');
+const secondsEl = document.querySelector('[data-seconds]');
+
+let userSelectedDate;
+
+startBtn.disabled = true;
+
 const options = {
   enableTime: true,
   time_24hr: true,
   defaultDate: new Date(),
   minuteIncrement: 1,
   onClose(selectedDates) {
-    console.log(selectedDates[0]);
+    userSelectedDate = selectedDates[0];
+
+    if (userSelectedDate <= Date.now()) {
+      iziToast.warning({
+        title: 'Warning',
+        message: 'Please choose a date in the future',
+        position: 'topRight',
+      });
+    } else {
+      startBtn.disabled = false;
+      startBtn.addEventListener('click', onClickButton);
+    }
   },
 };
 
-let userSelectedDate;
+const flatpickrObj = flatpickr(inputData, options);
 
-flatpickr(inputData, options);
+function onClickButton() {
+  setInterval(() => {
+    const userSelectedDate = flatpickrObj.selectedDates[0].getTime();
+    const { days, hours, minutes, seconds } = convertMs(
+      userSelectedDate - Date.now()
+    );
 
-startBtn.addEventListener('click', () => {
-  console.log('start');
-});
+    daysEl.textContent = addLeadingZero(days);
+    hoursEl.textContent = addLeadingZero(hours);
+    minutesEl.textContent = addLeadingZero(minutes);
+    secondsEl.textContent = addLeadingZero(seconds);
+  }, 1000);
 
-function addLeadingZero(value) {}
+  startBtn.disabled = true;
+}
 
-// const interval = setInterval(() => {
-//   console.log(Date.now());
-// });
-
-document.addEventListener('click', () => {
-  clearInterval(interval);
-});
-
-// console.log(convertMs(2000)); // {days: 0, hours: 0, minutes: 0, seconds: 2}
-// console.log(convertMs(140000)); // {days: 0, hours: 0, minutes: 2, seconds: 20}
-// console.log(convertMs(24140000)); // {days: 0, hours: 6 minutes: 42, seconds: 20}
-
-const date = new Date('2025-12-12');
-
-console.log(date.getTime());
-console.dir(date);
-
-const newDate = {
-  name: date,
-};
-
-console.log(newDate);
