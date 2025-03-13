@@ -11,6 +11,7 @@ const minutesEl = document.querySelector('[data-minutes]');
 const secondsEl = document.querySelector('[data-seconds]');
 
 let userSelectedDate;
+let timerId = null;
 
 startBtn.disabled = true;
 
@@ -38,11 +39,15 @@ const options = {
 const flatpickrObj = flatpickr(inputData, options);
 
 function onClickButton() {
-  setInterval(() => {
+  timerId = setInterval(() => {
     const userSelectedDate = flatpickrObj.selectedDates[0].getTime();
-    const { days, hours, minutes, seconds } = convertMs(
-      userSelectedDate - Date.now()
-    );
+    const diff = userSelectedDate - Date.now();
+    const { days, hours, minutes, seconds } = convertMs(diff);
+
+    if (diff <= 0) {
+      stopInteval();
+      return;
+    }
 
     daysEl.textContent = addLeadingZero(days);
     hoursEl.textContent = addLeadingZero(hours);
@@ -53,3 +58,6 @@ function onClickButton() {
   startBtn.disabled = true;
 }
 
+function stopInteval() {
+  clearInterval(timerId);
+}
