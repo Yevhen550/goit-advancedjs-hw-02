@@ -11,27 +11,34 @@
     <div class="container">
       <a href="index.html">
         <button class="button-85" type="button">Go Home</button>
-        <form class="form">
-          <label>
-            Delay (ms)
-            <input type="number" name="delay" required />
-          </label>
-
-          <fieldset>
-            <legend>State</legend>
-            <label>
-              <input type="radio" name="state" value="fulfilled" required />
-              Fulfilled
-            </label>
-            <label>
-              <input type="radio" name="state" value="rejected" required />
-              Rejected
-            </label>
-          </fieldset>
-
-          <button type="submit">Create notification</button>
-        </form>
       </a>
+      <form class="form">
+        <label>
+          Delay (ms)
+          <input
+            class="form-input"
+            type="number"
+            name="delay"
+            min="1000"
+            step="1000"
+            required
+          />
+        </label>
+
+        <fieldset class="form-state">
+          <legend>State</legend>
+          <label>
+            <input type="radio" name="state" value="fulfilled" required />
+            Fulfilled
+          </label>
+          <label>
+            <input type="radio" name="state" value="rejected" required />
+            Rejected
+          </label>
+        </fieldset>
+
+        <button class="button-85" type="submit">Create notification</button>
+      </form>
     </div>
     <script type="module" src="./js/2-snackbar.js"></script>
   </body>
